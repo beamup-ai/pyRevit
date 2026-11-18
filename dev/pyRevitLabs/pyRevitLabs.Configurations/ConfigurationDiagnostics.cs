@@ -21,10 +21,19 @@ public static class ConfigurationDiagnostics
     /// </summary>
     public static Action<string>? Info { get; set; }
 
+    private static bool IsSensitiveKeyName(string keyName)
+    {
+        return keyName.Equals("password", StringComparison.OrdinalIgnoreCase)
+            || keyName.Equals("token", StringComparison.OrdinalIgnoreCase)
+            || keyName.Equals("username", StringComparison.OrdinalIgnoreCase)
+            || keyName.Equals("credential", StringComparison.OrdinalIgnoreCase);
+    }
+
     internal static void ReportFallback(string sectionName, string keyName, Exception error)
     {
+        string safeKeyName = IsSensitiveKeyName(keyName) ? "<redacted>" : keyName;
         Warn?.Invoke(
-            "Config value [" + sectionName + "] " + keyName +
+            "Config value [" + sectionName + "] " + safeKeyName +
             " could not be read (" + error.Message + "); using default.");
     }
 

@@ -57,10 +57,22 @@ def _validate_pattern(route_pattern):
 
 
 def _cast_value(cast, val):
-    if cast in ["int", "float", "double", "bool"]:
-        return eval("%s(%s)" % (cast, val))  # pylint: disable=eval-used
+    if cast == "int":
+        return int(val)
+    elif cast in ["float", "double"]:
+        return float(val)
+    elif cast == "bool":
+        if isinstance(val, bool):
+            return val
+        val_normalized = str(val).strip().lower()
+        if val_normalized in ["true", "1", "yes", "on"]:
+            return True
+        if val_normalized in ["false", "0", "no", "off"]:
+            return False
+        raise ValueError("Invalid boolean value: {}".format(val))
     elif cast == "uuid":
         return uuid.UUID(val)
+    raise ValueError("Unsupported cast type: {}".format(cast))
 
 
 def route_match(route, path, method):

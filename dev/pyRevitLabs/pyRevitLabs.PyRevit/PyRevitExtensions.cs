@@ -340,13 +340,13 @@ namespace pyRevitLabs.PyRevit {
 
                     cfg.Configuration.RemoveOption(extSection, credentialKey);
                     removedAny = true;
-                    _logger.Debug("Removed legacy plaintext key \"{0}\" from config section \"{1}\"",
-                                  credentialKey, extSection);
+                    _logger.Debug("Removed a legacy plaintext credential key from config section \"{0}\"",
+                                  extSection);
                 }
                 catch (Exception removeError) {
                     _logger.Warn(removeError,
-                                 "Could not remove legacy credential key \"{0}\" from config section \"{1}\"",
-                                 credentialKey, extSection);
+                                 "Could not remove a legacy credential key from config section \"{0}\"",
+                                 extSection);
                 }
             }
 
